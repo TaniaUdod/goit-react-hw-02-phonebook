@@ -22,7 +22,7 @@ export class App extends Component {
     };
 
     this.setState(prevState => ({
-      contacts: [{ id: nanoid(), ...contact }, ...prevState.contacts],
+      contacts: [...prevState.contacts, newContact],
     }));
   };
 
