@@ -60,19 +60,33 @@ export class App extends Component {
     const { filter, contacts } = this.state;
 
     return (
-      <div>
+      <section>
         <h1>Phonebook</h1>
         <ContactForm onSubmit={this.addNewContact} />
         <div>
           <h2>Contacts</h2>
-          <Filter filter={filter} onFilterChange={this.handleFilterChange} />
-          <ContactList
-            contacts={this.filteredContacts()}
-            onDeleteContact={this.deleteContact}
-          />
-          {contacts.length === 0 && 'Your phonebook is empty 🥺'}
+
+          {contacts.length === 0 ? (
+            <div style={{ textAlign: 'center' }}>
+              Your phonebook is empty 🥺
+            </div>
+          ) : (
+            <>
+              <Filter
+                filter={filter}
+                onFilterChange={this.handleFilterChange}
+              />
+
+              {this.filteredContacts().length > 0 && (
+                <ContactList
+                  contacts={this.filteredContacts()}
+                  onDeleteContact={this.deleteContact}
+                />
+              )}
+            </>
+          )}
         </div>
-      </div>
+      </section>
     );
   }
 }
