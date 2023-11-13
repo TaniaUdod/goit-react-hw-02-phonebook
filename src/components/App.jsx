@@ -1,5 +1,6 @@
-import { nanoid } from 'nanoid';
 import { Component } from 'react';
+import { nanoid } from 'nanoid';
+import { ContactForm } from './ContactForm/ContactForm';
 
 export class App extends Component {
   state = {
@@ -10,12 +11,19 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
   addNewContact = contact => {
-    // const { contacts } = this.state;
+    const { contacts } = this.state;
+    const isExist = contacts.some(
+      ({ name }) => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (isExist) {
+      alert(`${contact.name} is already in contacts.`);
+      return;
+    }
+
     const newContact = {
       id: nanoid(),
       ...contact,
@@ -30,7 +38,7 @@ export class App extends Component {
     return (
       <div>
         <h1>Phonebook</h1>
-        <div onSubmit={this.addNewContact} />
+        <ContactForm onSubmit={this.addNewContact} />
         <div>
           <h2>Contacts</h2>
           <ul>
