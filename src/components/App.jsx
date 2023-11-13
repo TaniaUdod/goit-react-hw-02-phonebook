@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
+import { ContactList } from './ContactList/ContactList';
+import { Filter } from './Filter/Filter';
 
 export class App extends Component {
   state = {
@@ -34,20 +36,41 @@ export class App extends Component {
     }));
   };
 
+  filteredContacts = () => {
+    const { contacts, filter } = this.state;
+
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
+  handleFilterChange = event => {
+    this.setState({
+      filter: event.target.value,
+    });
+  };
+
+  deleteContact = id => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
+  };
+
   render() {
+    const { filter, contacts } = this.state;
+
     return (
       <div>
         <h1>Phonebook</h1>
         <ContactForm onSubmit={this.addNewContact} />
         <div>
           <h2>Contacts</h2>
-          <ul>
-            {this.state.contacts.map(contact => (
-              <li key={contact.id}>
-                {contact.name}: {contact.number}
-              </li>
-            ))}
-          </ul>
+          <Filter filter={filter} onFilterChange={this.handleFilterChange} />
+          <ContactList
+            contacts={this.filteredContacts()}
+            onDeleteContact={this.deleteContact}
+          />
+          {contacts.length === 0 && 'Your phonebook is empty 🥺'}
         </div>
       </div>
     );
